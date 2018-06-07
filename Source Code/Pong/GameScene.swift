@@ -16,11 +16,28 @@ class GameScene: SKScene {
     var topPaddle: SKSpriteNode?
     var fingerOnTopPaddle: Bool = false
     
+    var ball: SKSpriteNode?
+    
     override func didMove(to view: SKView) {
       
         bottomPaddle = childNode(withName: "bottomPaddle") as? SKSpriteNode
+        bottomPaddle!.physicsBody = SKPhysicsBody(rectangleOf: bottomPaddle!.frame.size)
+        bottomPaddle!.physicsBody!.isDynamic = false
         
         topPaddle = childNode(withName: "topPaddle") as? SKSpriteNode
+        topPaddle!.physicsBody = SKPhysicsBody(rectangleOf: topPaddle!.frame.size)
+        topPaddle!.physicsBody!.isDynamic = false
+        
+        ball = childNode(withName: "ball") as? SKSpriteNode
+        ball!.physicsBody = SKPhysicsBody(rectangleOf: ball!.frame.size)
+        ball!.physicsBody!.friction = 0
+        ball!.physicsBody!.restitution = 1
+        ball!.physicsBody!.linearDamping = 0
+        ball!.physicsBody!.angularDamping = 0
+        ball!.physicsBody!.allowsRotation = false
+        
+        //physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
     }
     
