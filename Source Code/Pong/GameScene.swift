@@ -39,6 +39,19 @@ class GameScene: SKScene {
         //physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
+        let topLeftPoint = CGPoint(x: -(size.width / 2), y: size.height / 2)
+        let topRightPoint = CGPoint(x: size.width / 2, y: size.height / 2)
+        let bottomLeftPoint = CGPoint(x: -(size.width / 2), y: -(size.height / 2))
+        let bottomRightPoint = CGPoint(x: size.width / 2, y: -(size.height / 2))
+        
+        let topNode = SKNode()
+        topNode.physicsBody = SKPhysicsBody(edgeFrom: topLeftPoint, to: topRightPoint)
+        addChild(topNode)
+        
+        let bottomNode = SKNode()
+        bottomNode.physicsBody = SKPhysicsBody(edgeFrom: bottomLeftPoint, to: bottomRightPoint)
+        addChild(bottomNode)
+        
     }
     
     override func update(_ currentTime: TimeInterval) {
