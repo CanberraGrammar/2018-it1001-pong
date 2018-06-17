@@ -8,7 +8,11 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    let BallCategory: UInt32 = 0x1 << 0
+    let TopCategory: UInt32 = 0x1 << 1
+    let BottomCategory: UInt32 = 0x1 << 2
     
     var bottomPaddle: SKSpriteNode?
     var fingerOnBottomPaddle: Bool = false
@@ -35,7 +39,10 @@ class GameScene: SKScene {
         ball!.physicsBody!.linearDamping = 0
         ball!.physicsBody!.angularDamping = 0
         ball!.physicsBody!.allowsRotation = false
+        ball!.physicsBody!.categoryBitMask = BallCategory
+        ball!.physicsBody!.contactTestBitMask = TopCategory | BottomCategory
         
+        physicsWorld.contactDelegate = self
         //physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
@@ -46,10 +53,12 @@ class GameScene: SKScene {
         
         let topNode = SKNode()
         topNode.physicsBody = SKPhysicsBody(edgeFrom: topLeftPoint, to: topRightPoint)
+        topNode.physicsBody!.categoryBitMask = TopCategory
         addChild(topNode)
         
         let bottomNode = SKNode()
         bottomNode.physicsBody = SKPhysicsBody(edgeFrom: bottomLeftPoint, to: bottomRightPoint)
+        bottomNode.physicsBody!.categoryBitMask = BottomCategory
         addChild(bottomNode)
         
     }
@@ -124,7 +133,38 @@ class GameScene: SKScene {
         
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        if ((contact.bodyA.categoryBitMask == BottomCategory) || (contact.bodyB.categoryBitMask == BottomCategory)) {
+            
+            print("Bottom collision")
+            
+        }
+        
+        else if ((contact.bodyA.categoryBitMask == TopCategory) || (contact.bodyB.categoryBitMask == TopCategory)) {
+            
+            print("Top collision")
+            
+        }
+        
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
