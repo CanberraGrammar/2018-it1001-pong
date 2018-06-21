@@ -22,6 +22,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var ball: SKSpriteNode?
     
+    var gameRunning: Bool = false
+    
     override func didMove(to view: SKView) {
       
         bottomPaddle = childNode(withName: "bottomPaddle") as? SKSpriteNode
@@ -43,7 +45,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball!.physicsBody!.contactTestBitMask = TopCategory | BottomCategory
         
         physicsWorld.contactDelegate = self
-        //physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
         let topLeftPoint = CGPoint(x: -(size.width / 2), y: size.height / 2)
@@ -79,6 +81,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if touchedNode.name == "topPaddle" {
             fingerOnTopPaddle = true
+        }
+        
+        if gameRunning == false {
+            
+            ball!.physicsBody!.applyImpulse(CGVector(dx: 5, dy: 5))
+
+            gameRunning = true
+            
         }
         
     }
