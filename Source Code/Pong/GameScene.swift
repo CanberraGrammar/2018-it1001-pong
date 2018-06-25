@@ -85,7 +85,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if gameRunning == false {
             
-            ball!.physicsBody!.applyImpulse(CGVector(dx: 5, dy: 5))
+            // Generate a random number between 0 and 1 (inclusive!)
+            let randomNumber = Int(arc4random_uniform(2))
+            
+            if randomNumber == 0 {
+            
+                ball!.physicsBody!.applyImpulse(CGVector(dx: 5, dy: 5))
+            
+            }
+            
+            else {
+                
+                ball!.physicsBody!.applyImpulse(CGVector(dx: -5, dy: -5))
+            }
 
             gameRunning = true
             
@@ -143,17 +155,62 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func resetGame() {
+        
+        // Reset the position of the paddles
+        topPaddle!.position.x = 0
+        bottomPaddle!.position.x = 0
+        
+        // Reset the ball
+        
+        // i. middle of the screen
+        ball!.position.x = 0
+        ball!.position.y = 0
+        
+        // ii. not moving
+        ball!.physicsBody!.isDynamic = false
+        ball!.physicsBody!.isDynamic = true
+        
+        // Unpause the game
+        view!.isPaused = false
+        
+        // Reset gameRunning to false
+        gameRunning = false
+        
+    }
+    
+    func gameOver() {
+        
+        // Pause the game
+        view!.isPaused = true
+        
+        // Show an alert
+        let gameOverAlert = UIAlertController(title: "Game Over", message: nil, preferredStyle: .alert)
+        let gameOverAction = UIAlertAction(title: "Okay", style: .default) { (theAlertAction) in
+            
+            self.resetGame()
+            
+        }
+        
+        gameOverAlert.addAction(gameOverAction)
+        
+        self.view!.window!.rootViewController!.present(gameOverAlert, animated: true, completion: nil)
+        
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
         if ((contact.bodyA.categoryBitMask == BottomCategory) || (contact.bodyB.categoryBitMask == BottomCategory)) {
             
             print("Bottom collision")
+            gameOver()
             
         }
         
         else if ((contact.bodyA.categoryBitMask == TopCategory) || (contact.bodyB.categoryBitMask == TopCategory)) {
             
             print("Top collision")
+            gameOver()
             
         }
         
