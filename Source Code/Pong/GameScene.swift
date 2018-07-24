@@ -20,6 +20,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var topPaddle: SKSpriteNode?
     var fingerOnTopPaddle: Bool = false
     
+    var topScoreLabel: SKLabelNode?
+    var bottomScoreLabel: SKLabelNode?
+    
+    var topScoreCount: Int = 0
+    var bottomScoreCount: Int = 0
+    
     var ball: SKSpriteNode?
     
     var gameRunning: Bool = false
@@ -33,6 +39,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         topPaddle = childNode(withName: "topPaddle") as? SKSpriteNode
         topPaddle!.physicsBody = SKPhysicsBody(rectangleOf: topPaddle!.frame.size)
         topPaddle!.physicsBody!.isDynamic = false
+        
+        topScoreLabel = childNode(withName: "topScoreLabel") as? SKLabelNode
+        bottomScoreLabel = childNode(withName: "bottomScoreLabel") as? SKLabelNode
         
         ball = childNode(withName: "ball") as? SKSpriteNode
         ball!.physicsBody = SKPhysicsBody(rectangleOf: ball!.frame.size)
@@ -203,6 +212,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((contact.bodyA.categoryBitMask == BottomCategory) || (contact.bodyB.categoryBitMask == BottomCategory)) {
             
             print("Bottom collision")
+            
+            topScoreCount += 1
+            topScoreLabel!.text = "\(topScoreCount)"
+            
             gameOver()
             
         }
@@ -210,6 +223,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else if ((contact.bodyA.categoryBitMask == TopCategory) || (contact.bodyB.categoryBitMask == TopCategory)) {
             
             print("Top collision")
+            
+            bottomScoreCount += 1
+            bottomScoreLabel!.text = String(bottomScoreCount)
+            
             gameOver()
             
         }
